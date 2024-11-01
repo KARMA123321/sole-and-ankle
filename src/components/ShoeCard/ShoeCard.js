@@ -111,7 +111,7 @@ const ImageWrapper = styled.div`
 `;
 
 const Image = styled.img`
-  width: 350px;
+  width: 100%;
 `;
 
 const Row = styled.div`
@@ -143,7 +143,7 @@ const SalePrice = styled.span`
 `;
 
 const Flag = styled.div`
-  font-size: calc(14 / 16)rem;
+  font-size: calc(14 / 16) rem;
   font-weight: 700;
   display: flex;
   justify-content: center;
@@ -154,7 +154,8 @@ const Flag = styled.div`
   height: 2rem;
   width: fit-content;
   padding: 9px 11px;
-  background-color: ${(p) => p.variant === "on-sale" ? COLORS.primary : COLORS.secondary};
+  background-color: ${(p) =>
+    p.variant === "on-sale" ? COLORS.primary : COLORS.secondary};
   color: ${COLORS.white};
   border-radius: 2px;
 `;
