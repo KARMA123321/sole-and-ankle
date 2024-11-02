@@ -112,9 +112,6 @@ const SalePrice = styled.span`
 const Flag = styled.div`
   font-size: calc(14 / 16) rem;
   font-weight: ${WEIGHTS.bold};
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: absolute;
   top: 12px;
   right: -4px;
