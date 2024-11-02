@@ -31,69 +31,35 @@ const ShoeCard = ({
       ? 'new-release'
       : 'default'
 
-  const RowComponent = () =>
-    variant === "on-sale"
-      ? NamePriceRowOnSale(name, price, salePrice)
-      : NamePriceRow(name, price);
-
-  const ImageWrapperComponent = () => {
-    switch (variant) {
-      case "on-sale":
-        return FlaggedImgWrapper(variant, "Sale", imageSrc);
-      case "new-release":
-        return FlaggedImgWrapper(variant, "Just Released", imageSrc);
-      case "default":
-        return ImgWrapper(imageSrc);
-    }
-  };
-
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
-        <ImageWrapperComponent />
+        <ImageWrapper>
+          <Image alt="" src={imageSrc} />
+          {variant === "on-sale" && <SaleFlag>Sale</SaleFlag>}
+          {variant === "new-release" && <NewFlag>Just released!</NewFlag>}
+        </ImageWrapper>
         <Spacer size={12} />
-        <RowComponent />
+        <Row>
+          <Name>{name}</Name>
+          <Price
+            style={{
+              "--color": variant === "on-sale" ? COLORS.gray[700] : undefined,
+              "--text-decoration":
+                variant === "on-sale" ? "line-through" : undefined,
+            }}
+          >
+            {formatPrice(price)}
+          </Price>
+        </Row>
         <Row>
           <ColorInfo>{pluralize("Color", numOfColors)}</ColorInfo>
+          {variant === "on-sale" ? (
+            <SalePrice>{formatPrice(salePrice)}</SalePrice>
+          ) : undefined}
         </Row>
       </Wrapper>
     </Link>
-  );
-};
-
-const NamePriceRow = (name, price) => {
-  return (
-    <Row>
-      <Name>{name}</Name>
-      <Price>{formatPrice(price)}</Price>
-    </Row>
-  );
-};
-
-const NamePriceRowOnSale = (name, price, salePrice) => {
-  return (
-    <Row>
-      <Name>{name}</Name>
-      <Price salePrice={salePrice}>{formatPrice(price)}</Price>
-      <SalePrice>{formatPrice(salePrice)}</SalePrice>
-    </Row>
-  );
-};
-
-const ImgWrapper = (imageSrc, alt = "") => {
-  return (
-    <ImageWrapper>
-      <Image alt={alt} src={imageSrc} />
-    </ImageWrapper>
-  );
-};
-
-const FlaggedImgWrapper = (variant, children, imageSrc, alt = "") => {
-  return (
-    <ImageWrapper>
-      <Image alt={alt} src={imageSrc} />
-      <Flag variant={variant}>{children}</Flag>
-    </ImageWrapper>
   );
 };
 
@@ -112,6 +78,7 @@ const ImageWrapper = styled.div`
 
 const Image = styled.img`
   width: 100%;
+  border-radius: 16px 16px 4px 4px;
 `;
 
 const Row = styled.div`
@@ -126,8 +93,8 @@ const Name = styled.h3`
 `;
 
 const Price = styled.span`
-  color: ${(p) => p.salePrice && COLORS.gray[700]};
-  text-decoration: ${(p) => p.salePrice && "line-through"};
+  color: var(--color);
+  text-decoration: var(--text-decoration);
 `;
 
 const ColorInfo = styled.p`
@@ -144,20 +111,26 @@ const SalePrice = styled.span`
 
 const Flag = styled.div`
   font-size: calc(14 / 16) rem;
-  font-weight: 700;
+  font-weight: ${WEIGHTS.bold};
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
   top: 12px;
   right: -4px;
-  height: 2rem;
-  width: fit-content;
-  padding: 9px 11px;
-  background-color: ${(p) =>
-    p.variant === "on-sale" ? COLORS.primary : COLORS.secondary};
+  height: 32px;
+  line-height: 32px;
+  padding: 0 10px;
   color: ${COLORS.white};
   border-radius: 2px;
+`;
+
+const SaleFlag = styled(Flag)`
+  background-color: ${COLORS.primary};
+`;
+
+const NewFlag = styled(Flag)`
+  background-color: ${COLORS.secondary};
 `;
 
 export default ShoeCard;
